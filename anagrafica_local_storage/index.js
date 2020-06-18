@@ -19,6 +19,36 @@ window.onload = () => {
 function updateCounter() {
    totContatti = anagrafica.length;
    document.getElementById('contatoreContatti').innerHTML = totContatti;
+
+   if (anagrafica.length > 0) {
+      let domContatti = document.getElementById('listaContatti');
+      if (domContatti) {
+         domContatti.remove();
+      }
+      let listaContatti = document.createElement('ul');
+      console.log(listaContatti);
+      listaContatti.id = "listaContatti";
+      listaContatti.classList.add('list-group');
+      anagrafica.forEach((p, i) => {
+         let li = document.createElement('li');
+         li.classList.add('list-group-item');
+         let contatto = document.createTextNode(`${p.nome} ${p.cognome} - ${p.codicefiscale}`);
+         let icon = document.createElement('i');
+         icon.classList.add('fas', 'fa-trash-alt', 'float-right');
+         icon.onclick = function () { deleteUser(li, i) };
+         li.appendChild(contatto);
+         li.appendChild(icon);
+         listaContatti.appendChild(li);
+      });
+      document.getElementById('contenitoreContatti').appendChild(listaContatti);
+   }
+}
+
+function deleteUser(li, i) {
+   li.remove();
+   console.log(anagrafica[i]);
+   anagrafica.splice(i, 1);
+   updateCounter();
 }
 
 function azzeraForm() {

@@ -1,0 +1,25 @@
+#primary-content {
+   background-color: #eee;
+   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+   margin-top: 25px;
+}
+
+.erroreCF {
+   border: 1px solid #ff0000!important;
+}
+
+#contatoreContatti {
+   background-color: green;
+   color: #fff;
+   padding: 5px;
+}
+
+i.fa-trash-alt {
+   color: #ff0000;
+   line-height: 1.5;
+}
+
+i.fa-trash-alt:hover {
+   opacity: 0.6;
+   cursor: pointer;
+}
