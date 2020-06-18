@@ -1,0 +1,279 @@
+/**
+*
+* Base stylesheet for the TREE course, Traveling website
+* @author: Lidia
+*
+*/
+
+/*
+* Common
+*/
+
+a, .btn-link {
+   color: #3cb7f2;
+}
+
+.text-brand {
+   color: #3cb7f2;
+}
+
+.title-with-line {
+   position: relative;
+   padding: 20px 0;
+}
+
+.title-with-line::after {
+   content: '\00a0';
+   position: absolute;
+   display: block;
+   width: 80px;
+   height: 2px;
+   background: #3cb7f2;
+   bottom: 0;
+}
+
+.separator {
+   background: #3cb7f2;
+   width: 80px;
+   height: 2px;
+   margin-left: 0;
+}
+
+.circle {
+   width: 36px;
+   height: 36px;
+   border: 1px solid #000;
+   text-align: center;
+   line-height: 35px;
+   border-radius: 50%;
+}
+
+.btn {
+   border-radius: 20px;
+   padding: 0 20px;
+}
+
+.input-group-text, .input-group-append {
+   background: #263647;
+   border-top-right-radius: 20px;
+   border-bottom-right-radius: 20px;
+   color: #fff;
+   border: 0;
+}
+
+/*
+* Header
+*/
+
+.header-top {
+   background-color: #3cb7f2;
+   padding: 6px 0;
+}
+
+.header-top a {
+   color: white;
+}
+
+.header-bottom {
+   padding: 10px 0;
+}
+
+/*
+* Footer
+*/
+
+.footer {
+   background: #08234e;
+   color: #fff;
+   padding: 20px 0;
+   text-align: center;
+}
+
+/*
+* Home Page
+*/
+
+.hero {
+   color: #fff;
+   background: url('../img/catania.jpg');
+   background-size: cover;
+   padding: 100px 0;
+   position: relative;
+}
+
+.hero .container {
+   position: relative;
+   z-index: 2;
+   /* in primo piano rispetto a .overlay */
+}
+
+.hero .overlay {
+   position: absolute;
+   background: rgba(0, 0, 0, 0.3);
+   width: 100%;
+   height: 100%;
+   display: block;
+   top: 0;
+   left: 0;
+   z-index: 1;
+}
+
+.hero i {
+   color: #3cb7f2;
+}
+
+.flight-search {
+   padding-top: 20px;
+   padding-bottom: 20px;
+}
+
+#flight-search-btn {
+   border-color: #3cb7f2;
+   color: #3cb7f2;
+   background: white;
+}
+
+.fight-search select, .flight-search input {
+   border-radius: 20px;
+   background-color: #f3f3f3;
+}
+
+.recommended {
+   background: #f5f5f5;
+   padding: 40px 0 70px;
+}
+
+.recommended p {
+   font-size: 14px;
+}
+
+/* piu specifico di .card-recommended-subtitle, quindi dopo devo specificare p con quella classe */
+
+.recommended p.card-recommended-subtitle {
+   color: #999;
+   font-size: 12px;
+}
+
+.recommended p.card-recommended-price {
+   color: #999;
+   font-size: 10px;
+}
+
+.recommended .btn {
+   font-size: 12px;
+}
+
+.cookie-banner {
+   bottom: 0;
+   left: 0;
+   position: fixed;
+   /* oppure position: sticky; */
+   display: block;
+   width: 100%;
+   background: #fff;
+   z-index: 3;
+}
+
+/*
+* Search results
+*/
+
+.search-results {
+   background-color: #eff0f7;
+}
+
+.btn-light {
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 22px;
+   color: #0770e3;
+   box-shadow: 0 0 0 2px #dddde5 inset;
+}
+
+.btn-light:hover {
+   color: #0770e3;
+   background-color: #fff;
+   box-shadow: 0 0 0 2px #0770e3 inset;
+}
+
+.left-column .card .btn, .right-column .card .btn {
+   border-radius: 3px;
+   padding: 1px 4px;
+}
+
+.left-column .card .fa-search {
+   color: #4486f2;
+   font-weight: 600;
+}
+
+.left-column .card a.card-link, .left-column .card .fa-caret-down {
+   color: #00a698;
+}
+
+.left-column .card a.card-link:hover {
+   color: #329185;
+}
+
+.left-column .card .btn-search, .right-column .card .btn-search {
+   color: #fff;
+   background-color: #00a698;
+   border-color: #00a698;
+   padding: 3px 8px;
+   font-weight: 600;
+}
+
+.left-column .card .btn-search:hover, .right-column .card .btn-search:hover {
+   color: #fff;
+   background-color: #00887d;
+   border-color: #00887d;
+}
+
+.left-column .card .btn-outline-search {
+   color: #00a698;
+   border-color: #00a698;
+}
+
+.left-column .card .btn-outline-search:hover {
+   color: #fff;
+   background-color: #00a698;
+   /* border-color: #00a698; */
+}
+
+.left-column .card-title {
+   font-weight: 600;
+   margin-top: 5px;
+}
+
+.left-column .card-title, .left-column .card-text {
+   color: #42475d;
+}
+
+.right-column .card h4, .right-column .card h6 {
+   font-weight: 400;
+}
+
+.right-column .card h6 {
+   color: #68697f;
+   cursor: help;
+}
+
+.right-column .card .small-info {
+   font-size: 12px;
+   font-weight: 400;
+}
+
+.right-column .card hr {
+   width: 90px;
+   height: 2px;
+   background: #68697f;
+}
+
+.right-column .card a.small-info {
+   color: #00a698;
+}
+
+.right-column .card .fa-plane {
+   color: #898294;
+   -webkit-text-stroke: 1px white;
+   /* hacky and only for webkit browsers */
+}
