@@ -7,37 +7,65 @@ function Persona(n, c, cf) {
 let anagrafica = [];
 let totContatti = 0;
 
-//init dell'applicazione
 window.onload = () => {
-   if (window.localStorage.getItem('utenti') != null) { // verifico che ci siano persone nello storage
+   if (window.localStorage.getItem('utenti') != null) {
       let datiStorage = JSON.parse(window.localStorage.getItem('utenti'));
-      anagrafica = datiStorage; // ho inizializzato l'anagrafica con i dati presenti nello store
+      anagrafica = datiStorage;
    }
-   updateCounter();
+   updateContacts();
 };
 
-function updateCounter() {
+function createContactsList() {
+   let domContatti = document.getElementById('listaContatti');
+   if (domContatti) {
+      domContatti.remove();
+   }
+   let listaContatti = document.createElement('ul');
+   listaContatti.id = "listaContatti";
+   listaContatti.classList.add('list-group');
+   return listaContatti;
+}
+
+function createContactListItem(p, i) {
+   let listItemContatto = document.createElement('li');
+   listItemContatto.classList.add('list-group-item');
+   let contatto = document.createTextNode(`${p.nome} ${p.cognome} - ${p.codicefiscale}`);
+   let icon = document.createElement('i');
+   icon.classList.add('fas', 'fa-trash-alt', 'float-right');
+   icon.onclick = function () { deleteUser(listItemContatto, i) };
+   listItemContatto.appendChild(contatto);
+   listItemContatto.appendChild(icon);
+   return listItemContatto;
+}
+
+function searchCF() {
+   let codiceCercato = document.getElementById('searchCF').value;
+   if (anagrafica.length > 0) {
+      anagrafica.forEach((p, i) => {
+         if (p.codicefiscale == codiceCercato) {
+            let listaContatti = createContactsList();
+            let listItemContatto = createContactListItem(p, i);
+            listaContatti.appendChild(listItemContatto);
+            document.getElementById('contenitoreContatti').appendChild(listaContatti);
+            return;
+         } else {
+            if (codiceCercato == '') {
+               updateContacts();
+            }
+         }
+      });
+   }
+}
+
+function updateContacts() {
    totContatti = anagrafica.length;
    document.getElementById('contatoreContatti').innerHTML = totContatti;
 
    if (anagrafica.length > 0) {
-      let domContatti = document.getElementById('listaContatti');
-      if (domContatti) {
-         domContatti.remove();
-      }
-      let listaContatti = document.createElement('ul');
-      listaContatti.id = "listaContatti";
-      listaContatti.classList.add('list-group');
+      let listaContatti = createContactsList();
       anagrafica.forEach((p, i) => {
-         let li = document.createElement('li');
-         li.classList.add('list-group-item');
-         let contatto = document.createTextNode(`${p.nome} ${p.cognome} - ${p.codicefiscale}`);
-         let icon = document.createElement('i');
-         icon.classList.add('fas', 'fa-trash-alt', 'float-right');
-         icon.onclick = function () { deleteUser(li, i) };
-         li.appendChild(contatto);
-         li.appendChild(icon);
-         listaContatti.appendChild(li);
+         let listItemContatto = createContactListItem(p, i);
+         listaContatti.appendChild(listItemContatto);
       });
       document.getElementById('contenitoreContatti').appendChild(listaContatti);
    }
@@ -49,7 +77,7 @@ function deleteUser(li, i) {
       li.remove();
       anagrafica.splice(i, 1);
       window.localStorage.setItem('utenti', JSON.stringify(anagrafica));
-      updateCounter();
+      updateContacts();
    }
 }
 
@@ -64,7 +92,7 @@ function salvaDatiStorage(n, c, cf) {
    anagrafica.push(p);
    window.localStorage.setItem('utenti', JSON.stringify(anagrafica));
    azzeraForm();
-   updateCounter();
+   updateContacts();
    document.getElementById('cf').classList.remove('erroreCF');
 }
 
@@ -74,13 +102,10 @@ function inviadati() {
    let cfInput = document.getElementById('cf').value;
    let trovato = false;
 
-   //validazione campi vuoti
    if (nomeInput == '' || cognomeInput == '' || cfInput == '') {
       alert('Tutti i campi sono obbligatori');
    } else {
       if (anagrafica.length > 0) {
-         // vuol dire che c'è almeno una persona nell'array
-         // devo controllare che all'interno dell'array anagrafica non ci sia un'altra persona con lo stesso cf
          anagrafica.forEach((p) => {
             if (p.codicefiscale == cfInput) {
                trovato = true;
@@ -95,13 +120,8 @@ function inviadati() {
             document.getElementById('cf').classList.add('erroreCF');
          }
       } else {
-         // l'anagrafica è vuota
          salvaDatiStorage(nomeInput, cognomeInput, cfInput);
          alert('Utente inserito con successo');
       }
    }
 }
-
-// al salva deve aggiornarsi un elenco puntato sotto "I tuoi contatti:", da anagrafica, per ogni li un'icona cestino che elimini il contatto, sia da anagrafica che da storage e si deve aggiornare il numeretto. Invec che alert confirm, se sì eliminiamo dallo storage
-
-// sotto cerca facciamo il cerca

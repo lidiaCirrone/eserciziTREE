@@ -20,7 +20,9 @@
          </div>
       </div>
       <div class="row">
+
          <div class="col col-12 col-sm-4">
+
             <p class="h3">Inserimento</p>
 
             <div class="form-group">
@@ -41,11 +43,17 @@
             <button class="btn btn-primary mb-3" onclick="inviadati()">Salva</button>
 
          </div>
+
          <div id="contenitoreContatti" class="col col-12 col-sm-4">
             <p class="h3">I tuoi contatti: <span id="contatoreContatti"></span></p>
          </div>
+
          <div class="col col-12 col-sm-4">
             <p class="h3">Cerca</p>
+            <div class="form-group">
+               <label>Inserisci il codice fiscale</label>
+               <input type="text" class="form-control" id="searchCF" onkeyup="searchCF()">
+            </div>
          </div>
       </div>
    </div>
