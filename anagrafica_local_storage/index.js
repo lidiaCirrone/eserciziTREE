@@ -41,20 +41,42 @@ function createContactListItem(p, i) {
 function searchCF() {
    let codiceCercato = document.getElementById('searchCF').value;
    if (anagrafica.length > 0) {
-      anagrafica.forEach((p, i) => {
-         if (p.codicefiscale == codiceCercato) {
-            let listaContatti = createContactsList();
-            let listItemContatto = createContactListItem(p, i);
-            listaContatti.appendChild(listItemContatto);
-            document.getElementById('contenitoreContatti').appendChild(listaContatti);
-            return;
+
+      if (codiceCercato == '') {
+         updateContacts();
+      } else {
+
+         let listaContatti = createContactsList();
+
+         if (!anagrafica.find(e => e['codicefiscale'].startsWith(codiceCercato))) {
+
+            let emptyListItem = document.createElement('li');
+            emptyListItem.classList.add('list-group-item');
+            let emptyMessage = document.createTextNode(`Nessun risultato per il codice fiscale ${codiceCercato}`);
+            emptyListItem.appendChild(emptyMessage);
+            listaContatti.appendChild(emptyListItem);
+
+            // non imposta a 0
+            contattiTrovati = 0;
+            console.log(contattiTrovati);
+            document.getElementById('contatoreContatti').innerHTML = contattiTrovati;
+
          } else {
-            if (codiceCercato == '') {
-               updateContacts();
-            }
+            anagrafica.forEach((p, i) => {
+               if (p.codicefiscale.startsWith(codiceCercato)) {
+                  let listItemContatto = createContactListItem(p, i);
+                  listaContatti.appendChild(listItemContatto);
+               }
+            });
          }
-      });
+
+         document.getElementById('contenitoreContatti').appendChild(listaContatti);
+      }
+
+      contattiTrovati = document.getElementById("listaContatti").childElementCount;
+      document.getElementById('contatoreContatti').innerHTML = contattiTrovati;
    }
+
 }
 
 function updateContacts() {
