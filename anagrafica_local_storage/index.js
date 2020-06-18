@@ -26,7 +26,6 @@ function updateCounter() {
          domContatti.remove();
       }
       let listaContatti = document.createElement('ul');
-      console.log(listaContatti);
       listaContatti.id = "listaContatti";
       listaContatti.classList.add('list-group');
       anagrafica.forEach((p, i) => {
@@ -46,8 +45,8 @@ function updateCounter() {
 
 function deleteUser(li, i) {
    li.remove();
-   console.log(anagrafica[i]);
    anagrafica.splice(i, 1);
+   window.localStorage.setItem('utenti', JSON.stringify(anagrafica));
    updateCounter();
 }
 
