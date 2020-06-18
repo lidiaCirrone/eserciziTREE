@@ -44,10 +44,13 @@ function updateCounter() {
 }
 
 function deleteUser(li, i) {
-   li.remove();
-   anagrafica.splice(i, 1);
-   window.localStorage.setItem('utenti', JSON.stringify(anagrafica));
-   updateCounter();
+   let confirmDelete = confirm(`Sei sicuro di voler eliminare il codice fiscale ${anagrafica[i].codicefiscale}?`);
+   if (confirmDelete) {
+      li.remove();
+      anagrafica.splice(i, 1);
+      window.localStorage.setItem('utenti', JSON.stringify(anagrafica));
+      updateCounter();
+   }
 }
 
 function azzeraForm() {
