@@ -1,7 +1,6 @@
 #primary-content {
    background-color: #eee;
-   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-   margin-top: 25px;
+   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .erroreCF {
@@ -11,7 +10,6 @@
 #contatoreContatti {
    background-color: green;
    color: #fff;
-   padding: 5px;
 }
 
 i.fa-trash-alt {
@@ -22,4 +20,17 @@ i.fa-trash-alt {
 i.fa-trash-alt:hover {
    opacity: 0.6;
    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+   #contenitoreContatti {
+      max-height: 18rem!important;
+      overflow: auto;
+   }
+}
+
+@media (min-width: 992px) {
+   #contatoreContatti {
+      padding: 5px;
+   }
 }
