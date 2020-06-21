@@ -39,6 +39,8 @@ var colors = [
 var playerNameContainer = document.getElementById('name');
 var tileContainer = document.getElementById('tile-container');
 
+var clickedTiles = [];
+
 
 // var colors = {
 //    red: 'ff0900',
@@ -74,6 +76,8 @@ function startGame() {
       // genera tile (shuffle)
       generateTiles();
 
+      // TODO pointer cursor on .tile-front
+
       // rendi le tile cliccabili e da lì gioca
       // stoppa il tempo alla vincita
    }
@@ -84,7 +88,7 @@ function stopGame() {
    // se era partito, salva il tempo e il giocatore nel locale storage in forma {giocatore: tempo}
    stopTimer();
 
-   
+
    removeDisabled(startButton);
    setDisabled(stopButton);
    // doppione di resetGame()?
@@ -95,7 +99,7 @@ function stopGame() {
 
 }
 
-function resetGame(){
+function resetGame() {
    stopTimer();
    emptyInput(playerNameContainer);
 
@@ -116,10 +120,6 @@ function generateTiles() {
    // console.log('--- container nella funzione generateTiles ---');
    // console.log(tileContainer);
    // empty container
-
-
-   // resetto solo le tile ma lasciando lo spazio per tile di default?
-   console.log(tileContainer);
    empty(tileContainer);
 
    let shuffledColors = shuffleColors(colors);
@@ -129,11 +129,11 @@ function generateTiles() {
    for (let i = 0; i < shuffledColors.length; i++) {
       let tileColor = shuffledColors[i];
       let tile = new Tile(tileColor, i);
-      let tileDOM = createTile(tileColor, i);
+      let tileDOM = createTile(tile, tileColor, i);
       // console.log('--- tileDOM ---');
       // console.log(tileDOM);
-      console.log('--- tile object ---');
-      console.log(tile);
+      // console.log('--- tile object ---');
+      // console.log(tile);
 
       // fill container with new tiles
       tileContainer.appendChild(tileDOM);
@@ -153,17 +153,94 @@ function shuffleColors(colors) {
    return colors;
 }
 
-function createTile(color, index) {
+function createTile(tileObject, color, index) {
    let tile = document.createElement('div');
    tile.classList.add('col', 'col-3', 'tile');
-   // tile.innerHTML = index;
-   // tile.style.backgroundColor = color;
+
+   let tileFront = document.createElement('div');
+   tileFront.classList.add('tile-front');
+   tile.appendChild(tileFront);
+   let tileBack = document.createElement('div');
+   tileBack.classList.add('tile-back');
+   tile.appendChild(tileBack);
+
+
+   tile.onclick = function () { flipTile(tile, tileObject) };
    return tile;
 }
 
 function Tile(color, index) {
    this.color = color;
    this.index = index;
+}
+
+function flipTile(tileDOM, tileObj) {
+   // console.log(tileDOM);
+   // console.log(tileObj);
+
+   let clickedTile = {
+      dom: tileDOM,
+      object: tileObj
+   }
+   clickedTiles.push(clickedTile);
+   // console.log(' --- clickedTiles ---');
+   // console.log(clickedTiles);
+
+   var firstTile = clickedTiles[0];
+
+   let tileFront = tileDOM.querySelector('.tile-front');
+   let tileBack = tileDOM.querySelector('.tile-back');
+
+   // tileFront.innerHTML = tileObj.index;
+   tileBack.style.backgroundColor = tileObj.color;
+
+
+   // interval prima di girarle?
+   toggleVisibility(tileFront);
+   toggleVisibility(tileBack);
+
+
+   // tileFront.toggle('disabled');
+   tileDOM.style.pointerEvents = 'none';
+
+
+
+   console.log('clickedTile object');
+   console.log(clickedTile);
+
+   console.log('clickedTiles array');
+   console.log(clickedTiles);
+
+   console.log('firstTile object');
+   console.log(firstTile);
+
+
+
+   if (clickedTiles.length == 2) {
+      if (firstTile.object.color == tileObj.color) {
+         console.log(tileObj.color);
+         console.log('matched');
+
+         //svuoto l'array
+
+      } else {
+         console.log(firstTile.object.color);
+         console.log(tileObj.color);
+         console.log('NOT matched');
+
+         // riabilito entrambe
+         firstTile.dom.style.pointerEvents = 'none';
+         tileDOM.style.pointerEvents = 'none';
+
+         // svuoto l'array
+
+
+         //  TODO interval prima di rigirarle sennò non vedo il colore
+         toggleVisibility(tileFront);
+         toggleVisibility(tileBack);
+      }
+
+   }
 }
 
 
@@ -195,18 +272,43 @@ function stopTimer() {
 
 // shortcut functions
 
-function setDisabled(button) {
-   button.disabled = true;
+function setDisabled(element) {
+   element.disabled = true;
 }
 
-function removeDisabled(button) {
-   button.disabled = false;
+function removeDisabled(element) {
+   element.disabled = false;
 }
 
-function empty(domElement){
-   domElement.innerHTML = '';
+function empty(element) {
+   element.innerHTML = '';
 }
 
-function emptyInput(domElement){
-   domElement.value = '';
+function emptyInput(element) {
+   element.value = '';
+}
+
+function toggleVisibility(element) {
+   // console.log('element, before');
+   // console.log(element);
+
+   // let visibility = element.style.display;
+   let visibility = window.getComputedStyle(element).getPropertyValue('display');
+
+   // console.log('visibility, before');
+   // console.log(visibility);
+
+   visibility == 'block' ? element.style.display = 'none' : element.style.display = 'block';
+
+
+   // if (visibility == 'block')
+   //    element.style.display = 'none';
+   // else
+   //    element.style.display = 'block';
+
+   // console.log('visibility, after');
+   // console.log(visibility);
+
+   // console.log('element, after');
+   // console.log(element);
 }

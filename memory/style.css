@@ -1,6 +1,22 @@
 .tile {
    text-align: center;
+   height: 210px;
+   padding: 20px;
+}
+
+.tile-front, .tile-back {
+   border-radius: 10px;
    background-color: #eee;
+   width: 100%;
+   height: 100%;
    /* margin: 1rem; */
-   padding: 4rem 2rem;
+   /* padding: 4rem 2rem; */
+}
+
+.tile-front {
+   display: block;
+}
+
+.tile-back {
+   display: none;
 }
