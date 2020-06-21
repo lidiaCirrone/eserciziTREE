@@ -20,16 +20,31 @@ var colors = [
 
 var playerNameContainer = document.getElementById('name');
 var timer = document.getElementById('timer');
+var winnersContainer = document.getElementById('winners');
 var tileContainer = document.getElementById('tile-container');
 
 var tileObjectsArray = [];
 var clickedTiles = [];
 var matchedTiles = 0;
+var winners = [];
+var winnersLs = window.localStorage.getItem('winners');
+
+var seconds = 0;
+var minutes = 0;
+var timer = document.getElementById('timer');
+
+
+
+// --------------------
+// ------- GAME -------
+// --------------------
 
 function startGame() {
    if (playerNameContainer.value.trim() == '') {
       alert('Per poter giocare devi inserire un nome');
-   } else {
+   }
+   // elseif player already in winners[]
+   else {
       startTimer(timer);
       setDisabled(playerNameContainer);
       setDisabled(startButton);
@@ -41,16 +56,13 @@ function startGame() {
 
 function stopGame() {
    // prompt di conferma?
-   stopTimer();
 
+   resetGame();
+
+   removeDisabled(playerNameContainer);
    removeDisabled(startButton);
    setDisabled(stopButton);
-   // doppione di resetGame()?
-   emptyInput(playerNameContainer);
-
-   // resetto solo le tile ma lasciando lo spazio per tile di default?
-   empty(tileContainer);
-
+   removeDisabled(resetButton);
 }
 
 function resetGame() {
@@ -63,7 +75,48 @@ function resetGame() {
 
 
 
-// tiles functions
+// --------------------
+// ------- RANK -------
+// --------------------
+
+window.onload = () => {
+   
+   if (winnersLs != null) {
+      let datiStorage = JSON.parse(winnersLs);
+      winners = datiStorage;
+   }
+
+   updateWinners();
+};
+
+function updateWinners() {
+
+   if (winnersLs != null) {
+
+      empty(winnersContainer);
+      let list = document.createElement('ul');
+      list.classList.add('list-group');
+      winnersContainer.appendChild(list);
+
+      winners.forEach((player, i) => {
+         let listItem = document.createElement('li');
+         listItem.classList.add('list-group-item');
+         listItem.innerHTML = `${player.name} - ${player.time}`;
+         list.appendChild(listItem);
+      });
+
+   } else {
+      let message = document.createElement('p');
+      message.innerHTML = 'Non è ancora stata giocata nessuna partita';
+      winnersContainer.appendChild(message);
+   }
+}
+
+
+
+// ---------------------
+// ------- TILES -------
+// ---------------------
 
 function generateTiles(cursor) {
    empty(tileContainer);
@@ -83,8 +136,6 @@ function generateTiles(cursor) {
       tileDOM.onclick = function () { flipTile(tileObject.dom, tileObject.color) };
       tileContainer.appendChild(tileDOM);
    }
-
-
 }
 
 function shuffleColors(colors) {
@@ -174,12 +225,18 @@ function flipTile(tileDOM, colorCode) {
 
    if (matchedTiles == tileObjectsArray.length) {
 
-      // salva giocatore in localStorage
-
+      let player = playerNameContainer.value.trim();
       let time = timer.innerHTML;
+      winners.push({
+         name: player,
+         time: time
+      })
+
+      window.localStorage.setItem('winners', JSON.stringify(winners));
 
       setTimeout(() => {
          alert(`Partita completata! Tempo impiegato: ${time}`);
+         updateWinners();
          resetGame();
       }, 1000);
    }
@@ -187,12 +244,11 @@ function flipTile(tileDOM, colorCode) {
 
 
 
-// timer functions
+// ---------------------
+// ------- TIMER -------
+// ---------------------
 
 function startTimer() {
-   var seconds = 0;
-   var minutes = 0;
-   var timer = document.getElementById('timer');
    interval = setInterval(function () {
       seconds++;
       if (seconds == 60) {
@@ -212,7 +268,9 @@ function stopTimer() {
 
 
 
-// shortcut functions
+// ----------------------------------
+// ------- SHORTCUT FUNCTIONS -------
+// ----------------------------------
 
 function setDisabled(element) {
    element.disabled = true;
