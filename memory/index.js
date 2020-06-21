@@ -69,6 +69,11 @@ function resetGame() {
    stopTimer();
    emptyInput(playerNameContainer);
 
+   removeDisabled(playerNameContainer);
+   removeDisabled(startButton);
+   setDisabled(stopButton);
+   removeDisabled(resetButton);
+
    // resetto senza stare a fare lo shuffle?
    generateTiles('auto');
 }
@@ -90,18 +95,27 @@ window.onload = () => {
 };
 
 function updateWinners() {
+   empty(winnersContainer);
 
-   if (winnersLs != null) {
-
-      empty(winnersContainer);
+   if (winners != null && winners.length != 0) {
       let list = document.createElement('ul');
       list.classList.add('list-group');
       winnersContainer.appendChild(list);
 
+      winners.sort((a, b) => {
+         minutesA = a.time.m;
+         secondsA = a.time.s;
+         let timeA = minutesA*60 + secondsA;
+         minutesB = b.time.m;
+         secondsB = b.time.s;
+         let timeB = minutesB*60 + secondsB;
+         return timeA - timeB;
+       });
+
       winners.forEach((player, i) => {
          let listItem = document.createElement('li');
          listItem.classList.add('list-group-item');
-         listItem.innerHTML = `${player.name} - ${player.time}`;
+         listItem.innerHTML = `${player.name} - ${player.time.m}:${player.time.s}`;
          list.appendChild(listItem);
       });
 
@@ -229,10 +243,15 @@ function flipTile(tileDOM, colorCode) {
       let time = timer.innerHTML;
       winners.push({
          name: player,
-         time: time
+         time: {
+            m: minutes,
+            s: seconds
+         }
       })
 
       window.localStorage.setItem('winners', JSON.stringify(winners));
+
+      matchedTiles = 0;
 
       setTimeout(() => {
          alert(`Partita completata! Tempo impiegato: ${time}`);
