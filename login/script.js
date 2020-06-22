@@ -18,14 +18,15 @@ function loadDB() {
 
 
 async function signup() {
-   let email = document.getElementById('registerMailInput').value;
-   let password = document.getElementById('registerPasswordInput').value;
+   let email = document.getElementById('registerEmail').value;
+   let password = document.getElementById('registerPassword').value;
    let passwordConfirm = document.getElementById('registerPasswordConfirm').value;
 
    if (email.length < 3 || password.length < 3 || passwordConfirm !== password) {
       alert("L'email o la password inserite non sono valide");
    } else if (checkUser(email)) {
       alert('Ti sei già registrato');
+      // non funziona
    } else {
 
       let encryptedPassword = await encrypt(password);
@@ -67,8 +68,8 @@ function checkLogin(i, password) {
 
 
 async function login() {
-   let email = document.getElementById('loginMailInput').value;
-   let password = document.getElementById('loginPasswordInput').value;
+   let email = document.getElementById('loginEmail').value;
+   let password = document.getElementById('loginPassword').value;
 
    if (email.length < 3 || password.length < 3) {
       alert('Dati errati o non validi');
@@ -80,7 +81,7 @@ async function login() {
          if (checkLogin(indexEmail, tmpPassword) == true) {
             window.location.href = 'home.html';
          } else {
-            alert('Password non corretta!');
+            alert('Password non corretta!'); // anche quando non esiste l'utente, anche quando e corretta
          }
       } else {
          alert('Devi ancora registrarti');
