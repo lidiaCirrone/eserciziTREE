@@ -8,64 +8,60 @@ function User(email, password) {
 }
 
 
-function loadDB() {
-   if (window.localStorage.getItem(lsKey) == null) {
-      window.localStorage.setItem(lsKey, JSON.stringify(userDB));
-   } else {
-      userDB = JSON.parse(window.localStorage.getItem(lsKey));
+// function loadDB() {
+//    if (window.localStorage.getItem(lsKey) == null) {
+//       window.localStorage.setItem(lsKey, JSON.stringify(userDB));
+//    } else {
+//       userDB = JSON.parse(window.localStorage.getItem(lsKey));
+//    }
+// }
+
+
+window.onload = () => {
+   if (window.localStorage.getItem(lsKey) != null) {
+      let datiStorage = JSON.parse(window.localStorage.getItem(lsKey));
+      userDB = datiStorage;
    }
-}
+};
 
 
 async function signup() {
-   let email = document.getElementById('registerEmail').value;
-   let password = document.getElementById('registerPassword').value;
-   let passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+   let email = document.getElementById('registerEmail');
+   let password = document.getElementById('registerPassword');
+   let passwordConfirm = document.getElementById('registerPasswordConfirm');
 
-   if (email.length < 3 || password.length < 3 || passwordConfirm !== password) {
-      alert("L'email o la password inserite non sono valide");
-   } else if (checkUser(email)) {
-      alert('Ti sei già registrato');
-      // non funziona
+   let emailValue = email.value;
+   let passwordValue = password.value;
+   let passwordConfirmValue = passwordConfirm.value;
+
+   if (emailValue.trim() == '' || passwordValue.trim() == '' || passwordConfirmValue.trim() == '') {
+      alert('Tutti i campi sono obbligatori');
    } else {
+      // regex email?
+      if (passwordConfirmValue !== passwordValue) {
+         alert('Le password inserite non coincidono');
+      } else {
+         if (existingUser(emailValue)) {
+            alert('Indirizzo emailValue già utilizzato');
+         } else {
 
-      let encryptedPassword = await encrypt(password);
-      let user = new User(email, encryptedPassword);
+            let encryptedPassword = await encrypt(passwordValue);
+            let user = new User(emailValue, encryptedPassword);
 
-      // creo un metodo in User()
-      userDB.push(user);
-      window.localStorage.setItem(lsKey, JSON.stringify(userDB));
-   }
+            // creo un metodo in User()
+            userDB.push(user);
+            window.localStorage.setItem(lsKey, JSON.stringify(userDB));
 
-   // clear inputs
+            alert('Utente registrato con successo');
 
-}
-
-
-function checkUser(email) {
-   let result = false; // null
-
-   userDB.forEach((utente, index) => {
-      if (utente.email === email) {
-         result = index;
-         return;
+            emptyInput(email);
+            emptyInput(password);
+            emptyInput(passwordConfirm);
+         }
       }
-   });
-
-   return result;
-}
-
-
-function checkLogin(i, password) {
-   let result = false;
-
-   if (userDB[i].password === password) {
-      result = true;
    }
 
-   return result;
 }
-
 
 async function login() {
    let email = document.getElementById('loginEmail').value;
@@ -74,11 +70,11 @@ async function login() {
    if (email.length < 3 || password.length < 3) {
       alert('Dati errati o non validi');
    } else {
-      let indexEmail = checkUser(email);
+      let indexEmail = existingUser(email);
 
       if (indexEmail != null) {
          let tmpPassword = await encrypt(password);
-         if (checkLogin(indexEmail, tmpPassword) == true) {
+         if (checkPassword(indexEmail, tmpPassword) == true) {
             window.location.href = 'home.html';
          } else {
             alert('Password non corretta!'); // anche quando non esiste l'utente, anche quando e corretta
@@ -89,14 +85,39 @@ async function login() {
    }
 }
 
-async function encrypt(text) {
-    const data = new TextEncoder().encode(text);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hash));
-    const hashHex = hashArray
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-    return hashHex;
+function existingUser(email) {
+   let result = false;
+   userDB.forEach((user) => {
+      if (user.email === email) {
+         result = true;
+         return;
+      }
+   });
+   return result;
 }
 
-loadDB();
+function checkPassword(i, password) {
+   let result = false;
+   if (userDB[i].password === password) {
+      result = true;
+   }
+   return result;
+}
+
+async function encrypt(text) {
+   const data = new TextEncoder().encode(text);
+   const hash = await crypto.subtle.digest("SHA-256", data);
+   const hashArray = Array.from(new Uint8Array(hash));
+   const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+   return hashHex;
+}
+
+// loadDB();
+
+
+
+function emptyInput(element) {
+   element.value = '';
+}
