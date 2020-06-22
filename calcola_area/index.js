@@ -26,7 +26,7 @@ function scegliFigura() {
          altezzaTriangolo.classList.add('mt-2');
          altezzaTriangolo.id = 'altezzaTriangolo';
          // titolo
-         let titoloTriangolo = createSizeTitle('dei lati');
+         let titoloTriangolo = createSizeTitle('di base e altezza');
          let bottoneTriangolo = createButton();
          bottoneTriangolo.onclick = function () { calcolaAreaTriangolo(figura, baseTriangolo.value, altezzaTriangolo.value) };
          // mostra nel DOM
