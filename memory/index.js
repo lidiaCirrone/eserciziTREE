@@ -55,14 +55,18 @@ function startGame() {
 }
 
 function stopGame() {
-   // prompt di conferma?
-
+   
+   let confirmStop = confirm('Vuoi davvero interrompere?');
+   if(confirmStop){
+      
    resetGame();
 
    removeDisabled(playerNameContainer);
    removeDisabled(startButton);
    setDisabled(stopButton);
    removeDisabled(resetButton);
+   }
+
 }
 
 function resetGame() {
