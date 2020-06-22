@@ -25,23 +25,26 @@ async function signup() {
    if (emailValue.trim() == '' || passwordValue.trim() == '' || passwordConfirmValue.trim() == '') {
       alert('Tutti i campi sono obbligatori');
    } else {
-      // regex email?
-      if (passwordConfirmValue !== passwordValue) {
-         alert('Le password inserite non coincidono');
+      if (!validateEmail(emailValue)) {
+         alert('Indirizzo email non valido');
       } else {
-         if (existingUser(emailValue) !== false) {
-            alert('Indirizzo email già utilizzato');
+         if (passwordConfirmValue !== passwordValue) {
+            alert('Le password inserite non coincidono');
          } else {
-            let encryptedPassword = await encrypt(passwordValue);
-            let user = new User(emailValue, encryptedPassword);
+            if (existingUser(emailValue) !== false) {
+               alert('Indirizzo email già utilizzato');
+            } else {
+               let encryptedPassword = await encrypt(passwordValue);
+               let user = new User(emailValue, encryptedPassword);
 
-            userDB.push(user);
-            window.localStorage.setItem(lsKey, JSON.stringify(userDB));
-            alert('Utente registrato con successo');
+               userDB.push(user);
+               window.localStorage.setItem(lsKey, JSON.stringify(userDB));
+               alert('Utente registrato con successo');
 
-            emptyInput(email);
-            emptyInput(password);
-            emptyInput(passwordConfirm);
+               emptyInput(email);
+               emptyInput(password);
+               emptyInput(passwordConfirm);
+            }
          }
       }
    }
@@ -85,6 +88,10 @@ function checkPassword(i, password) {
       result = true;
    }
    return result;
+}
+
+function validateEmail(email) {
+   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 async function encrypt(text) {
