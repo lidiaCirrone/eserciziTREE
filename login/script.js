@@ -1,21 +1,10 @@
 let userDB = [];
 const lsKey = 'utenti';
 
-
 function User(email, password) {
    this.email = email;
    this.password = password;
 }
-
-
-// function loadDB() {
-//    if (window.localStorage.getItem(lsKey) == null) {
-//       window.localStorage.setItem(lsKey, JSON.stringify(userDB));
-//    } else {
-//       userDB = JSON.parse(window.localStorage.getItem(lsKey));
-//    }
-// }
-
 
 window.onload = () => {
    if (window.localStorage.getItem(lsKey) != null) {
@@ -23,7 +12,6 @@ window.onload = () => {
       userDB = datiStorage;
    }
 };
-
 
 async function signup() {
    let email = document.getElementById('registerEmail');
@@ -41,17 +29,14 @@ async function signup() {
       if (passwordConfirmValue !== passwordValue) {
          alert('Le password inserite non coincidono');
       } else {
-         if (existingUser(emailValue)) {
-            alert('Indirizzo emailValue già utilizzato');
+         if (existingUser(emailValue) !== false) {
+            alert('Indirizzo email già utilizzato');
          } else {
-
             let encryptedPassword = await encrypt(passwordValue);
             let user = new User(emailValue, encryptedPassword);
 
-            // creo un metodo in User()
             userDB.push(user);
             window.localStorage.setItem(lsKey, JSON.stringify(userDB));
-
             alert('Utente registrato con successo');
 
             emptyInput(email);
@@ -60,36 +45,34 @@ async function signup() {
          }
       }
    }
-
 }
 
 async function login() {
    let email = document.getElementById('loginEmail').value;
    let password = document.getElementById('loginPassword').value;
 
-   if (email.length < 3 || password.length < 3) {
-      alert('Dati errati o non validi');
+   if (email.trim() == '' || password.trim() == '') {
+      alert('Entrambi i campi sono obbligatori');
    } else {
-      let indexEmail = existingUser(email);
-
-      if (indexEmail != null) {
+      let userIndex = existingUser(email);
+      if (userIndex !== false) {
          let tmpPassword = await encrypt(password);
-         if (checkPassword(indexEmail, tmpPassword) == true) {
+         if (checkPassword(userIndex, tmpPassword)) {
             window.location.href = 'home.html';
          } else {
-            alert('Password non corretta!'); // anche quando non esiste l'utente, anche quando e corretta
+            alert('Password errata!');
          }
       } else {
-         alert('Devi ancora registrarti');
+         alert('Utente inesistente');
       }
    }
 }
 
 function existingUser(email) {
    let result = false;
-   userDB.forEach((user) => {
+   userDB.forEach((user, i) => {
       if (user.email === email) {
-         result = true;
+         result = i;
          return;
       }
    });
@@ -113,10 +96,6 @@ async function encrypt(text) {
       .join("");
    return hashHex;
 }
-
-// loadDB();
-
-
 
 function emptyInput(element) {
    element.value = '';
