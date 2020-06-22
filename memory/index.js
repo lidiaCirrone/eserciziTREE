@@ -68,6 +68,8 @@ function stopGame() {
 function resetGame() {
    stopTimer();
    emptyInput(playerNameContainer);
+   matchedTiles = 0;
+
 
    removeDisabled(playerNameContainer);
    removeDisabled(startButton);
@@ -115,7 +117,14 @@ function updateWinners() {
       winners.forEach((player, i) => {
          let listItem = document.createElement('li');
          listItem.classList.add('list-group-item');
-         listItem.innerHTML = `${player.name} - ${player.time.m}:${player.time.s}`;
+         listItem.innerHTML = `${player.name}`;
+
+         let score = document.createElement('span');
+         score.classList.add('float-right');
+         let scoreText = player.time.m == 0 ? `${player.time.s}s` : `${player.time.m}m ${player.time.s}s`;
+         score.innerHTML = scoreText;
+
+         listItem.appendChild(score);
          list.appendChild(listItem);
       });
 
@@ -251,12 +260,10 @@ function flipTile(tileDOM, colorCode) {
 
       window.localStorage.setItem('winners', JSON.stringify(winners));
 
-      matchedTiles = 0;
-
       setTimeout(() => {
          alert(`Partita completata! Tempo impiegato: ${time}`);
-         updateWinners();
          resetGame();
+         updateWinners();
       }, 1000);
    }
 }
