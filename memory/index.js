@@ -174,7 +174,7 @@ function shuffleColors(colors) {
 
 function createTile(cursor) {
    let tile = document.createElement('div');
-   tile.classList.add('col', 'col-3', 'tile');
+   tile.classList.add('col','col-6','col-md-4','col-lg-3','tile');
 
    let tileFront = document.createElement('div');
    tileFront.classList.add('tile-front');
