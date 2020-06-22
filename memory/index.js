@@ -56,7 +56,7 @@ function startGame() {
 
 function stopGame() {
    
-   let confirmStop = confirm('Vuoi davvero interrompere?');
+   let confirmStop = confirm('Vuoi davvero interrompere la partita?');
    if(confirmStop){
       
    resetGame();
@@ -152,7 +152,8 @@ function generateTiles(cursor) {
 
    for (let i = 0; i < shuffledColors.length; i++) {
       let tileColor = shuffledColors[i];
-      let tileDOM = createTile(cursor);
+      let tileBox = createTile(cursor);
+      let tileDOM = tileBox.querySelector('.tile');
       let tileObject = {
          dom: tileDOM,
          color: tileColor,
@@ -161,7 +162,7 @@ function generateTiles(cursor) {
 
       tileObjectsArray.push(tileObject);
       tileDOM.onclick = function () { flipTile(tileObject.dom, tileObject.color) };
-      tileContainer.appendChild(tileDOM);
+      tileContainer.appendChild(tileBox);
    }
 }
 
@@ -177,8 +178,12 @@ function shuffleColors(colors) {
 }
 
 function createTile(cursor) {
+   let tileBox = document.createElement('div');
+   tileBox.classList.add('col','col-6','col-md-4','col-lg-3','p-3');
+
    let tile = document.createElement('div');
-   tile.classList.add('col','col-6','col-md-4','col-lg-3','tile');
+   tile.classList.add('tile');
+   tileBox.appendChild(tile);
 
    let tileFront = document.createElement('div');
    tileFront.classList.add('tile-front');
@@ -190,7 +195,7 @@ function createTile(cursor) {
    tileBack.style.cursor = cursor;
    tile.appendChild(tileBack);
 
-   return tile;
+   return tileBox;
 }
 
 // function Tile(color, index) {

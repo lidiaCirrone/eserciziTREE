@@ -1,7 +1,6 @@
 .tile {
    text-align: center;
    height: 210px;
-   padding: 20px;
 }
 
 .tile-front, .tile-back {
