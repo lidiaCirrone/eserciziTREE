@@ -42,7 +42,7 @@ var timer = document.getElementById('timer');
 function startGame() {
    if (playerNameContainer.value.trim() == '') {
       alert('Per poter giocare devi inserire un nome');
-   } else if((winners.find(e => e['name'] == playerNameContainer.value.trim()))){
+   } else if (winners.find(e => e['name'] == playerNameContainer.value.trim())) {
       alert('Giocatore già presente in classifica');
    } else {
       startTimer(timer);
@@ -55,16 +55,16 @@ function startGame() {
 }
 
 function stopGame() {
-   
-   let confirmStop = confirm('Vuoi davvero interrompere la partita?');
-   if(confirmStop){
-      
-   resetGame();
 
-   removeDisabled(playerNameContainer);
-   removeDisabled(startButton);
-   setDisabled(stopButton);
-   removeDisabled(resetButton);
+   let confirmStop = confirm('Vuoi davvero interrompere la partita?');
+   if (confirmStop) {
+
+      resetGame();
+
+      removeDisabled(playerNameContainer);
+      removeDisabled(startButton);
+      setDisabled(stopButton);
+      removeDisabled(resetButton);
    }
 
 }
@@ -91,7 +91,7 @@ function resetGame() {
 // --------------------
 
 window.onload = () => {
-   
+
    if (winnersLs != null) {
       let datiStorage = JSON.parse(winnersLs);
       winners = datiStorage;
@@ -111,12 +111,12 @@ function updateWinners() {
       winners.sort((a, b) => {
          minutesA = a.time.m;
          secondsA = a.time.s;
-         let timeA = minutesA*60 + secondsA;
+         let timeA = minutesA * 60 + secondsA;
          minutesB = b.time.m;
          secondsB = b.time.s;
-         let timeB = minutesB*60 + secondsB;
+         let timeB = minutesB * 60 + secondsB;
          return timeA - timeB;
-       });
+      });
 
       winners.forEach((player, i) => {
          let listItem = document.createElement('li');
@@ -179,7 +179,7 @@ function shuffleColors(colors) {
 
 function createTile(cursor) {
    let tileBox = document.createElement('div');
-   tileBox.classList.add('col','col-6','col-md-4','col-lg-3','p-3');
+   tileBox.classList.add('col', 'col-6', 'col-md-4', 'col-lg-3', 'p-3');
 
    let tile = document.createElement('div');
    tile.classList.add('tile');
