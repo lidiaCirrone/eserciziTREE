@@ -61,6 +61,7 @@ async function login() {
       if (userIndex !== false) {
          let tmpPassword = await encrypt(password);
          if (checkPassword(userIndex, tmpPassword)) {
+            document.cookie = `username=${email}; path=/`;
             window.location.href = 'home.html';
          } else {
             alert('Password errata!');
