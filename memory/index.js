@@ -42,9 +42,9 @@ var timer = document.getElementById('timer');
 function startGame() {
    if (playerNameContainer.value.trim() == '') {
       alert('Per poter giocare devi inserire un nome');
-   }
-   // elseif player already in winners[]
-   else {
+   } else if((winners.find(e => e['name'] == playerNameContainer.value.trim()))){
+      alert('Giocatore già presente in classifica');
+   } else {
       startTimer(timer);
       setDisabled(playerNameContainer);
       setDisabled(startButton);
