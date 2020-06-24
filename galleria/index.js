@@ -3,8 +3,25 @@ const USERSURL = 'users/';
 const ALBUMSURL = 'albums/';
 const PHOTOSSURL = 'photos/';
 
-function getPhotos(id) {
-   console.log(id);
+async function getPhotos(userID, albumID, albumTitle) {
+   console.log('getPhotos()');
+   let photos$ = await fetch(`${SERVERURL}${ALBUMSURL}${albumID}/${PHOTOSSURL}`).then((res) => res.json());
+   console.log(photos$);
+
+   document.getElementById('albumTitle').innerHTML = albumTitle;
+
+   let colTag = '';
+   
+   photos$.forEach((photo) => {
+
+      colTag += `
+      <div class="col-3">
+         <img src="${photo.thumbnailUrl}" class="img-fluid">
+      </div>
+      `;
+
+      document.getElementById('photoContent').innerHTML = colTag;
+   });
 }
 
 async function getAlbum() {
@@ -21,9 +38,17 @@ async function getAlbum() {
       let imgs$ = await fetch(`${SERVERURL}${ALBUMSURL}${album.id}/${PHOTOSSURL}`).then((response) => response.json());
       let thumbnailUrl = imgs$[0].thumbnailUrl;
 
+      let photoNumber = imgs$.length;
+
+      console.log('album');
+      console.log(album);
+      console.log('imgs$');
+      console.log(imgs$);
+
       colTag += `
       <div class="col-3">
-         <div class="albums" style="background-image: url('${thumbnailUrl}')" onclick="getPhotos(${album.id})"></div>
+         <div class="albums" style="background-image: url('${thumbnailUrl}')" onclick="getPhotos(${userID},${album.id},'${album.title}')"><span class="photoNumber">${photoNumber}</span></div>
+         <p>${album.title}</p>
       </div>
       `;
 
