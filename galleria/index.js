@@ -8,7 +8,7 @@ function getPhotos(id) {
 }
 
 async function getAlbum() {
-   
+
    let selectedUser = document.getElementById('users');
    let userID = selectedUser.value;
    let name = selectedUser.options[selectedUser.options.selectedIndex].innerText;
@@ -19,17 +19,11 @@ async function getAlbum() {
    albums$.forEach(async (album) => {
 
       let imgs$ = await fetch(`${SERVERURL}${ALBUMSURL}${album.id}/${PHOTOSSURL}`).then((response) => response.json());
-      // console.log(imgs$.length);
-      let imgs = [];
-      imgs$.forEach((img, i) => {
-         if (i == 0) {
-            imgs.push(img.thumbnailUrl);
-         }
-      });
+      let thumbnailUrl = imgs$[0].thumbnailUrl;
 
       colTag += `
       <div class="col-3">
-         <div class="albums" style="background-image: url('${imgs[0]}')" onclick="getPhotos(${album.id})"></div>
+         <div class="albums" style="background-image: url('${thumbnailUrl}')" onclick="getPhotos(${album.id})"></div>
       </div>
       `;
 
@@ -45,7 +39,7 @@ async function getUsers() {
 function initialization() {
 
    let users = getUsers();
-   let optionTag = '';
+   optionTag = '<option disabled selected>-- Seleziona un utente --</option>';
    users.then((usr) => {
       usr.forEach(user => {
          optionTag += `<option value="${user.id}">${user.name}</option>`;
