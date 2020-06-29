@@ -1,0 +1,17 @@
+
+#modale.nascosto{
+    display: none;
+}
+
+#logout{
+    padding-right: 10px;
+}
+
+body{
+    margin: 0px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
