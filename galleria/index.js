@@ -3,24 +3,18 @@ const USERSURL = 'users/';
 const ALBUMSURL = 'albums/';
 const PHOTOSSURL = 'photos/';
 
-async function getPhotos(userID, albumID, albumTitle) {
-   console.log('getPhotos()');
+async function getPhotos(albumID, albumTitle) {
+
    let photos$ = await fetch(`${SERVERURL}${ALBUMSURL}${albumID}/${PHOTOSSURL}`).then((res) => res.json());
-   console.log(photos$);
-
-   document.getElementById('albumTitle').innerHTML = albumTitle;
-
+   document.getElementById('album-title').innerHTML = `Foto dell'album ${albumTitle}`;
    let colTag = '';
-   
    photos$.forEach((photo) => {
-
       colTag += `
-      <div class="col-3">
+      <div class="col-6 col-md-4 col-lg-3 p-1">
          <img src="${photo.thumbnailUrl}" class="img-fluid">
       </div>
       `;
-
-      document.getElementById('photoContent').innerHTML = colTag;
+      document.getElementById('photo-content').innerHTML = colTag;
    });
 }
 
@@ -29,7 +23,7 @@ async function getAlbum() {
    let selectedUser = document.getElementById('users');
    let userID = selectedUser.value;
    let name = selectedUser.options[selectedUser.options.selectedIndex].innerText;
-   document.getElementById('selectedUser').innerHTML = name;
+   document.getElementById('selected-user').innerHTML = `Gli album di ${name}`;
 
    let albums$ = await fetch(`${SERVERURL}${USERSURL}${userID}/${ALBUMSURL}`).then((res) => res.json());
    let colTag = '';
@@ -40,19 +34,14 @@ async function getAlbum() {
 
       let photoNumber = imgs$.length;
 
-      console.log('album');
-      console.log(album);
-      console.log('imgs$');
-      console.log(imgs$);
-
       colTag += `
-      <div class="col-3">
-         <div class="albums" style="background-image: url('${thumbnailUrl}')" onclick="getPhotos(${userID},${album.id},'${album.title}')"><span class="photoNumber">${photoNumber}</span></div>
+      <div class="col-6 col-md-4 col-lg-3 p-1">
+         <div class="albums" style="background-image: url('${thumbnailUrl}')" onclick="getPhotos(${userID},${album.id},'${album.title}')"><div class="photo-number">${photoNumber}</div></div>
          <p>${album.title}</p>
       </div>
       `;
 
-      document.getElementById('albumContent').innerHTML = colTag;
+      document.getElementById('album-content').innerHTML = colTag;
    });
 }
 
